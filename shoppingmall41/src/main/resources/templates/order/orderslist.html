@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:insert="utils/imports.html :: meta"></th:block>
+	<th:block th:insert="utils/imports.html :: maincss"></th:block>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@600;800&display=swap" rel="stylesheet">
+
+	<style>
+		/* 추가된 스타일 */
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+
+		th,
+		td {
+			border: 1px solid #dddddd;
+			text-align: left;
+			padding: 8px;
+		}
+
+		.center-align {
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<th:block th:insert="utils/header.html :: header"></th:block>
+	<br><br>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-13">
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<th style="text-align:center;">주문번호</th>
+								<th style="text-align:center;">상품</th>
+								<th style="text-align:center;">상품정보</th>
+								<th style="text-align:center;">수량</th>
+								<th style="text-align:center;">합계</th>
+								<th style="text-align:center;">주문일자</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="order : ${orders}">
+								<!-- Display order details here -->
+								<td th:text="${order.orderid}" style="text-align: center;"></td>
+								<td>
+									<div style="text-align: center;">
+										<a th:href="${'/detail?id=' + order.item.itemid}">
+											<img th:src="${#strings.replace(order.item.getImagePath(), '/static/', '')}"
+												alt="" th:width="100" th:height="100" />
+										</a>
+									</div>
+								</td>
+								<td style="max-width: 320px; text-align: center;">
+									<h4 style="font-size: 15px;" th:text="${order.item.getName()}"></h4>
+								</td>
+								<td style="text-align: center;" th:text="${order.quantity}"></td>
+								<td style="text-align: center;" th:text="${order.orderprice}"></td>
+								<td style="text-align: center;"
+									th:text="${#temporals.format(order.orderdate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+								</td>
+								<td style="text-align: center; font-weight: bold;"
+									th:text="${#numbers.formatDecimal(#aggregates.sum(orders, 'orderprice'))}"></td>
+							</tr>
+							
+								
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<br><br><br>
+	<div style="width: 66%; margin-left:auto;margin-right: auto; ">
+		<th:block th:insert="utils/footer.html :: footer"></th:block>
+	</div>
+	<th:block th:insert="utils/imports.html :: mainjs"></th:block>
+</body>
+
+</html>
